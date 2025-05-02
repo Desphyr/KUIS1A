@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #canvas-container {
+            border: 1px solid black;
+            width: 700px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+        }
+
+        #timer {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+
+        #seconds {
+            color: green;
+        }
+
+        #milliseconds {
+            color: red;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #start {
+            background-color: green;
+        }
+
+        #stop {
+            background-color: yellow;
+            color: black;
+        }
+
+        #reset {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container">
+        <div id="timer">
+            <span id="seconds">000</span>:<span id="milliseconds">00</span>
+        </div>
+        <div class="buttons">
+            <button id="start">Start Timer</button>
+            <button id="stop">Stop Timer</button>
+            <button id="reset">Reset Timer</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const secondsDisplay = document.getElementById('seconds');
+            const millisecsDisplay = document.getElementById('milliseconds');
+            const startBtn = document.getElementById('start');
+            const stopBtn = document.getElementById('stop');
+            const resetBtn = document.getElementById('reset');
+
+            let milliseconds = 0;
+            let seconds = 0;
+            let timerInterval = null;
+
+
+            function updateDisplay() {
+                secondsDisplay.textContent = seconds.toString().padStart(3, '0');
+                millisecsDisplay.textContent = milliseconds.toString().padStart(2, '0');
+            }
+
+            function startTimer() {
+                if (timerInterval !== null) return;
+
+                timerInterval = setInterval(() => {
+                    milliseconds++;
+
+                    if (milliseconds > 99) {
+                        milliseconds = 0;
+                        seconds++;
+                    }
+
+                    updateDisplay();
+                }, 10);
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            function resetTimer() {
+                stopTimer();
+                milliseconds = 0;
+                seconds = 0;
+                updateDisplay();
+            }
+
+
+            startBtn.addEventListener('click', startTimer);
+            stopBtn.addEventListener('click', stopTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            updateDisplay();
+        });
+    </script>
+</body>
+
+</html>

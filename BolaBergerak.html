@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bola Bergerak</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #canvas-container {
+            border: 1px solid black;
+            width: 700px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            background-color: green;
+        }
+
+        #ball {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container">
+        <div id="canvas"></div>
+        <div id="ball"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ball = document.getElementById('ball');
+            const canvas = document.getElementById('canvas-container');
+            const canvasWidth = canvas.offsetWidth;
+            const canvasHeight = canvas.offsetHeight;
+            const ballSize = 20;
+
+            let posX = 10;
+            let posY = canvasHeight / 2 - ballSize / 2;
+            let state = 'right';
+
+            function animateBall() {
+                if (state === 'right') {
+                    posX += 2;
+                    if (posX >= canvasWidth - ballSize - 10) {
+                        state = 'down';
+                    }
+                } else if (state === 'down') {
+                    posY += 2;
+                    if (posY >= canvasHeight - ballSize - 10) {
+                        state = 'left';
+                    }
+                } else if (state === 'left') {
+                    posX -= 2;
+                    if (posX <= 10) {
+                        state = 'hide';
+                    }
+                } else if (state === 'hide') {
+                    ball.style.display = 'none';
+                    return; // Stop animation
+                }
+
+                ball.style.left = posX + 'px';
+                ball.style.top = posY + 'px';
+
+                requestAnimationFrame(animateBall);
+            }
+            animateBall();
+        });
+
+
+        window.onload = function () {
+            const ball = document.getElementById('ball');
+            ball.style.display = 'block';
+        };
+    </script>
+</body>
+
+</html>
